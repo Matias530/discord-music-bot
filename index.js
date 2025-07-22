@@ -7,6 +7,9 @@ const { token } = require('./config.json');
 
 const CLIENT = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]});
 
+
+
+
 CLIENT.once(Events.ClientReady, readyClient => {
     console.log(`Iniciado como ${readyClient.user.tag}`);
 });

@@ -1,5 +1,5 @@
 const{ SlashCommandBuilder } = require("discord.js");
-const { joinVoiceChannel } = require("@discordjs/voice");
+const { connectUserChannel } = require("../../utils/connectUserChannel.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -7,18 +7,14 @@ module.exports = {
         .setDescription("se une al canal"),
     async execute(interaction) {
 
-        const voice_channel = interaction.member.voice.channel;
+        try{
 
-        if (!voice_channel) {
-            await interaction.reply(`No estas en un canal de voz`);
+            const connection = await connectUserChannel(interaction);
+
+        } catch(error){
+            await interaction.reply(error.message);
             return;
         }
-
-        const connection = joinVoiceChannel({
-	        channelId: voice_channel.id,
-	        guildId: voice_channel.guild.id,
-	        adapterCreator: voice_channel.guild.voiceAdapterCreator,
-        });
 
         await interaction.reply(`Ya me uni al canal`);
 
