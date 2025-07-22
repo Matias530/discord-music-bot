@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/Matias530/discord-music-bot#readme",
   "dependencies": {
+    "@discordjs/voice": "^0.18.0",
     "discord.js": "^14.21.0",
-    "dotenv": "^17.2.0"
+    "dotenv": "^17.2.0",
+    "libsodium-wrappers": "^0.7.15"
   }
 }

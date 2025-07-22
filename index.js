@@ -1,19 +1,20 @@
-import { Client, Collection, Events, GatewayIntentBits } from "discord.js";
-import { readdirSync} from "node:fs";
-import path, { join } from "node:path";
+const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
 const path = require("node:path");
 const fs = require("node:fs");
 const { token } = require('./config.json');
 
 
 
-const CLIENT = new Client({intents: [GatewayIntentBits.Guilds]});
+const CLIENT = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]});
 
 CLIENT.once(Events.ClientReady, readyClient => {
     console.log(`Iniciado como ${readyClient.user.tag}`);
 });
 
 CLIENT.commands = new Collection();
+
+const foldersPath = path.join(__dirname, 'commands');
+const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
@@ -33,7 +34,7 @@ for (const folder of commandFolders) {
 CLIENT.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
-	const command = interaction.CLIENT.commands.get(interaction.commandName);
+	const command = CLIENT.commands.get(interaction.commandName);
 
 	if (!command) {
 		console.error(`No command matching ${interaction.commandName} was found.`);
