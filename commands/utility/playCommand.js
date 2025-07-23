@@ -1,8 +1,5 @@
 const{ ButtonBuilder, ButtonStyle, SlashCommandBuilder, ActionRowBuilder } = require("discord.js");
-const { createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
-const { connectUserChannel } = require("../../utils/connectUserChannel.js");
-const { downloadMusic } = require("../../utils/downloadMusic");
-const { audioPlayer } = require("../../audioPlayer.js");
+const { playMusic } = require("../../utils/playMusic.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,46 +12,14 @@ module.exports = {
         ),
     async execute(interaction) {
 
-        const { player, queue } = audioPlayer;
         const url = interaction.options.getString("url");
 
-        //mejorar poniendo todo en la lista
-        if(player.state.status === AudioPlayerStatus.Playing){
-            queue.push(url);
-            await interaction.reply("añadido a la lista");
-            return;
-        }
-
-        await interaction.deferReply();
-
-        
-
-        let path = undefined;
-        let connection = undefined;
 
         try{
-            connection = await connectUserChannel(interaction);
+            await playMusic(interaction, url);
         } catch(error){
-            await interaction.editReply(error.message);
-            return;
+            console.log(error);
         }
-
-        try{
-
-            path = await downloadMusic(url);
-
-        } catch(error){
-            interaction.editReply(error.message);
-            return;
-        }
-
-        audioPlayer.lastPath = path;
-        const resource = createAudioResource(path);
-
-
-        connection.subscribe(player);
-
-        player.play(resource);
 
 
         const skip = new ButtonBuilder()

@@ -1,6 +1,5 @@
 const youtubedl = require('youtube-dl-exec');
 const path = require("path");
-//const fs = require("fs");
 
 async function downloadMusic(url) {
   try {
@@ -15,7 +14,7 @@ async function downloadMusic(url) {
         });
 
 
-    const fileName = `${info.title.replace(/[\/\\?%*:|"<>]/g, "-")}.mp3`;
+    const fileName = `music.mp3`;
     const filePath = path.resolve(__dirname, "../music", fileName);
 
     await youtubedl(url, {
