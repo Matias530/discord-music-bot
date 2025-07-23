@@ -4,7 +4,8 @@ const { createAudioPlayer } = require('@discordjs/voice');
 
 const audioPlayer = {
     queue: [],
-    player: createAudioPlayer()
+    player: createAudioPlayer(),
+    lastPath: undefined
 };
 
 

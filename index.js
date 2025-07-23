@@ -7,7 +7,7 @@ const { token } = require('./config.json');
 
 const CLIENT = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]});
 
-
+require('./events/playerEvent')();
 
 
 CLIENT.once(Events.ClientReady, readyClient => {

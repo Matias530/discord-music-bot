@@ -1,6 +1,5 @@
 const{ ButtonBuilder, ButtonStyle, SlashCommandBuilder, ActionRowBuilder } = require("discord.js");
-const { createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
-const fs = require("node:fs");
+const { createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 const { connectUserChannel } = require("../../utils/connectUserChannel.js");
 const { downloadMusic } = require("../../utils/downloadMusic");
 const { audioPlayer } = require("../../audioPlayer.js");
@@ -19,7 +18,7 @@ module.exports = {
         const { player, queue } = audioPlayer;
         const url = interaction.options.getString("url");
 
-
+        //mejorar poniendo todo en la lista
         if(player.state.status === AudioPlayerStatus.Playing){
             queue.push(url);
             await interaction.reply("añadido a la lista");
@@ -49,7 +48,7 @@ module.exports = {
             return;
         }
 
-
+        audioPlayer.lastPath = path;
         const resource = createAudioResource(path);
 
 
@@ -81,32 +80,6 @@ module.exports = {
             components: [action]
         });
 
-        // mover a otro archivo
-        player.on("stateChange", async (oldState, newState) => {
-
-            if(oldState.status !== AudioPlayerStatus.Idle && newState.status === AudioPlayerStatus.Idle){
-                //arreglar ruta
-                try{
-                    fs.unlinkSync(path);
-                } catch(error){
-                    console.log(error.message);
-                }
-
-                if(queue.length > 0){
-
-                    const url = queue.shift();
-
-                    const path = await downloadMusic(url);
-
-                    const resource = createAudioResource(path);
-
-                    player.play(resource);
-
-                }
-
-            }
-
-        });
 
     }
 }
